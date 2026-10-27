@@ -1,0 +1,27 @@
+name: Build APK
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Arrange project
+        run: |
+          M=app/src/main
+          mkdir -p $M/assets $M/java/com/skyexplorer/app $M/res/values $M/res/drawable $M/res/mipmap-anydpi-v26
+          cp index.html script.js style.css $M/assets/
+          cp MainActivity.java $M/java/com/skyexplorer/app/
+          cp AndroidManifest.xml $M/
+          cp styles.xml colors.xml $M/res/values/
+          cp ic_fg.xml $M/res/drawable/
+          cp ic_launcher.xml $M/res/mipmap-anydpi-v26/
+          cp app_build.gradle app/build.gradle
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.7 }
+      - run: gradle assembleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SkyExplorer-apk
+          path: app/build/outputs/apk/release/*.apk
