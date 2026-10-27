@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // ==================== إعدادات خريطة السماء ====================
-    const config = {
+    const config = {container: "sky-map-container",
+datapath: "https://ofrohn.github.io/data/",
         width: window.innerWidth,
         height: window.innerHeight,
         projection: "stereographic",
